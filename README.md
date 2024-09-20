@@ -1,0 +1,128 @@
+# Talky Sphere
+**Talky Sphere** is a chat application designed for real-time communication. It includes features like user registration, group chats, and real-time messaging. The app focuses on creating a seamless, intuitive user experience, possibly integrating additional features like media sharing, online status updates, and authentication through multiple providers. The app's design emphasizes modern web development technologies and may follow Atomic Design principles for better scalability and maintainability.
+
+## About Me
+- **Name**: Sumit Pratap Singh
+- **University**: Indian Institute Of Technology (IIT) Mandi
+- **Department**: Computer Science and Engineering (CSE)
+
+### **System Design Overview**
+
+#### 1. **User Registration and Authentication**
+   - **NextAuth** will handle multiple authentication methods (Email, GitHub, Google, Twitter).
+   - **MongoDB** (via **Prisma**) will store user credentials, profiles (name, profile picture), and other related information.
+   - **Authentication Flow**:
+     1. User signs up or logs in.
+     2. JWT tokens will be issued to authenticated users.
+   
+#### 2. **Messaging System**
+   - **Pusher** will manage real-time messaging and group chat updates.
+   - **MongoDB** will store message history (text, media, timestamps) for each user or group.
+   - **Message Flow**:
+     1. A user sends a message via the chat interface.
+     2. The message is saved in MongoDB using Prisma.
+     3. **Pusher** broadcasts the message to other users in real-time.
+     4. All clients will receive real-time updates without needing to refresh.
+
+#### 3. **Group Chat Functionality**
+   - Group creation and management will be supported with options for admins to invite/remove users.
+   - **MongoDB** will store group metadata, members, and message history.
+   - **Pusher** will broadcast real-time updates (e.g., new members, new messages).
+
+#### 4. **Profile Customization**
+   - Users can update their names and profile pictures using a form.
+   - **Cloudinary** will handle image uploads.
+   - **MongoDB** will store the profile data (via Prisma).
+   - **Profile Update Flow**:
+     1. The user uploads a profile picture via the frontend.
+     2. The image is sent to Cloudinary, which returns a URL.
+     3. The profile data, including the new picture URL, is updated in MongoDB.
+
+#### 5. **Online Status**
+   - **Pusher** will handle real-time online/offline status by subscribing to user presence channels.
+   - Users will see the live status of others based on their active WebSocket connections.
+
+#### 6. **Image Uploads in Chat**
+   - Users can upload and share images within chats using **Cloudinary**.
+   - Images are uploaded to Cloudinary and URLs are shared in the chat messages.
+   - **MongoDB** stores references to the image URLs in each message.
+
+#### 7. **Tech Stack Explanation**
+   - **Next.js**: Provides server-side rendering (SSR) and excellent support for building fast and scalable web apps.
+   - **TypeScript**: Ensures type safety and reduces potential bugs, enhancing the developer experience.
+   - **Tailwind CSS**: Allows for rapid and consistent styling of components.
+   - **Headless UI**: Accessible and reusable UI components for better UX.
+   - **Prisma**: Simplifies database access and management for MongoDB, particularly with TypeScript support.
+   - **MongoDB**: NoSQL database is chosen due to its flexibility and scalability for real-time chat data storage.
+   - **NextAuth**: Simplifies the implementation of multiple authentication strategies.
+   - **Zustand**: Manages global state for efficient component updates.
+   - **Pusher**: Provides real-time communication, essential for live chat features.
+   - **Cloudinary**: Simplifies the handling of image uploads, transformations, and management.
+
+### **System Architecture**
+
+1. **Frontend**:
+   - Built with **Next.js** for handling UI and routing.
+   - Uses **Zustand** for global state management (e.g., storing user data, chat state).
+   - **Tailwind CSS** and **Headless UI** ensure a modern, clean, and responsive user interface.
+   - Chat interface includes text input, image uploads, and real-time message display.
+   
+2. **Backend**:
+   - **Next.js** with **Prisma** ORM is used to connect to **MongoDB** for managing data (users, chats, groups).
+   - REST APIs are created to handle user profiles, group creation, and chat messages.
+   - Real-time updates are managed by **Pusher**, which integrates WebSockets for live communication.
+   
+3. **Database (MongoDB)**:
+   - Stores users, chat messages, group data, and media links.
+   - **Prisma** facilitates querying the database, ensuring type safety and performance.
+
+4. **Real-Time Communication (Pusher)**:
+   - Handles the WebSocket connections for live chat and status updates.
+   - Manages both one-on-one chats and group chats efficiently.
+
+5. **Image Management (Cloudinary)**:
+   - Cloudinary is integrated into the chat system to manage image uploads.
+   - URLs generated by Cloudinary are stored in MongoDB for easy retrieval.
+
+### **System Design Document**
+
+#### **Introduction**
+   - **Purpose**: To create a scalable, real-time messaging service that supports individual and group chats, media sharing, and profile management.
+   - **Tech Stack**: Next.js, TypeScript, Tailwind CSS, MongoDB, Pusher, Prisma, Cloudinary.
+
+#### **High-Level Design**
+   - **Authentication**: Handled via NextAuth for OAuth and JWT-based flows.
+   - **Messaging**: Implemented with Pusher for real-time updates and MongoDB for storing chat history.
+   - **Media Sharing**: Integrated Cloudinary for efficient image storage and retrieval.
+   - **UI/UX**: Designed with Atomic Design principles for reusable and scalable components.
+
+#### **Component Breakdown**
+   - **Frontend**:
+     - Built with Next.js, Tailwind CSS.
+     - Components follow Atomic Design for scalability and maintainability.
+   - **Backend**:
+     - Next.js REST APIs using Prisma and MongoDB.
+     - Handles user management, chats, and media uploads.
+   - **Real-Time Layer**:
+     - Pusher WebSocket channels for real-time updates.
+
+#### **Setup and Installation Instructions**
+1. **Prerequisites**:
+   - Node.js v14+
+   - MongoDB
+   - Pusher account
+   - Cloudinary account
+2. **Installation**:
+   - Clone the repository.
+   - Run `npm install` to install dependencies.
+   ```bash
+   git clone https://github.com/sumitnjmsingh/Talky-Sphere.git
+   ```
+   - Set up environment variables for MongoDB, Pusher, Cloudinary, and NextAuth.
+    ```bash
+    cp .env.example .env
+    ```
+
+3. **Running the App**:
+   - Run `npm run dev` to start the development server.
+   - Open `localhost:3000` in the browser to access the app.
